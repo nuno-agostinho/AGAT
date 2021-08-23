@@ -1,0 +1,247 @@
+Command line: [exonerate --model protein2genome --showvulgar yes --showquerygff no --softmasktarget --showalignment no --showtargetgff --score 300 --percent 50 --ryo >%qi length=%ql alnlen=%qal\n>%ti length=%tl alnlen=%tal\n --target /mendel-nas1/soppenheim/EvolAppl/BRAKER/A_atri/Annotation/Exonerate/missing_2/A_atri_genome.edta_softMask2-334.fasta --query /mendel-nas1/soppenheim/EvolAppl/Proteins/Align/Split_Combined_insect_proteins/Combined_insect_proteins-2.fasta]
+Hostname: [mendel-c0021]
+vulgar: tr|Q0IE94|Q0IE94_AEDAE 37 163 . Aatri_ctg4 2336838 2336209 - 435 M 50 150 S 0 1 5 0 2 I 0 247 3 0 2 S 1 2 M 75 225
+# --- START OF GFF DUMP ---
+#
+#
+##gff-version 2
+##source-version exonerate:protein2genome:local 2.4.0
+##date 2021-08-12
+##type DNA
+#
+#
+# seqname source feature start end score strand frame attributes
+#
+Aatri_ctg4	exonerate:protein2genome:local	gene	2336210	2336838	435	-	.	gene_id 1 ; sequence tr|Q0IE94|Q0IE94_AEDAE ; gene_orientation + ; identity 63.20 ; similarity 84.80
+Aatri_ctg4	exonerate:protein2genome:local	cds	2336688	2336838	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2336688	2336838	.	-	.	insertions 0 ; deletions 0 ; identity 70.00 ; similarity 94.00
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2336686	2336687	.	-	.	intron_id 1 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2336437	2336687	.	-	.	intron_id 1
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2336437	2336438	.	-	.	intron_id 0 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2336210	2336436	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2336210	2336436	.	-	.	insertions 0 ; deletions 0 ; identity 58.67 ; similarity 78.67
+Aatri_ctg4	exonerate:protein2genome:local	similarity	2336210	2336838	435	-	.	alignment_id 1 ; Query tr|Q0IE94|Q0IE94_AEDAE ; Align 2336839 38 150 ; Align 2336435 89 225
+# --- END OF GFF DUMP ---
+#
+>tr|Q0IE94|Q0IE94_AEDAE length=163 alnlen=126
+>Aatri_ctg4 length=2491643 alnlen=629
+vulgar: tr|Q7Q9N2|Q7Q9N2_ANOGA 11 325 . Aatri_ctg4 2125698 2124128 - 1055 M 21 63 S 0 1 5 0 2 I 0 66 3 0 2 S 1 2 M 42 126 5 0 2 I 0 79 3 0 2 M 54 162 S 0 1 5 0 2 I 0 87 3 0 2 S 1 2 M 52 156 S 0 2 5 0 2 I 0 62 3 0 2 S 1 1 M 62 186 G 1 0 M 8 24 S 0 1 5 0 2 I 0 233 3 0 2 S 1 2 M 25 75 S 0 1 5 0 2 I 0 80 3 0 2 S 1 2 M 44 132
+# --- START OF GFF DUMP ---
+#
+#
+##gff-version 2
+##source-version exonerate:protein2genome:local 2.4.0
+##date 2021-08-12
+##type DNA
+#
+#
+# seqname source feature start end score strand frame attributes
+#
+Aatri_ctg4	exonerate:protein2genome:local	gene	2124129	2125698	1055	-	.	gene_id 1 ; sequence tr|Q7Q9N2|Q7Q9N2_ANOGA ; gene_orientation + ; identity 72.40 ; similarity 85.06
+Aatri_ctg4	exonerate:protein2genome:local	cds	2125635	2125698	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2125635	2125698	.	-	.	insertions 0 ; deletions 0 ; identity 80.95 ; similarity 85.71
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2125633	2125634	.	-	.	intron_id 1 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2125565	2125634	.	-	.	intron_id 1
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2125565	2125566	.	-	.	intron_id 0 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2125437	2125564	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2125437	2125564	.	-	.	insertions 0 ; deletions 0 ; identity 83.72 ; similarity 88.37
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2125435	2125436	.	-	.	intron_id 2 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2125354	2125436	.	-	.	intron_id 2
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2125354	2125355	.	-	.	intron_id 1 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2125191	2125353	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2125191	2125353	.	-	.	insertions 0 ; deletions 0 ; identity 85.19 ; similarity 92.59
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2125189	2125190	.	-	.	intron_id 3 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2125100	2125190	.	-	.	intron_id 3
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2125100	2125101	.	-	.	intron_id 2 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2124940	2125099	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2124940	2125099	.	-	.	insertions 0 ; deletions 0 ; identity 82.69 ; similarity 96.15
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2124938	2124939	.	-	.	intron_id 4 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2124874	2124939	.	-	.	intron_id 4
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2124874	2124875	.	-	.	intron_id 3 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2124662	2124873	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2124662	2124873	.	-	.	insertions 0 ; deletions 1 ; identity 68.57 ; similarity 84.29
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2124660	2124661	.	-	.	intron_id 5 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2124425	2124661	.	-	.	intron_id 5
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2124425	2124426	.	-	.	intron_id 4 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2124347	2124424	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2124347	2124424	.	-	.	insertions 0 ; deletions 0 ; identity 68.00 ; similarity 84.00
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2124345	2124346	.	-	.	intron_id 6 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2124263	2124346	.	-	.	intron_id 6
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2124263	2124264	.	-	.	intron_id 5 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2124129	2124262	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2124129	2124262	.	-	.	insertions 0 ; deletions 0 ; identity 38.64 ; similarity 61.36
+Aatri_ctg4	exonerate:protein2genome:local	similarity	2124129	2125698	1055	-	.	alignment_id 1 ; Query tr|Q7Q9N2|Q7Q9N2_ANOGA ; Align 2125699 12 63 ; Align 2125563 34 126 ; Align 2125354 76 162 ; Align 2125098 131 156 ; Align 2124873 184 186 ; Align 2124687 247 24 ; Align 2124423 256 75 ; Align 2124261 282 132
+# --- END OF GFF DUMP ---
+#
+>tr|Q7Q9N2|Q7Q9N2_ANOGA length=327 alnlen=314
+>Aatri_ctg4 length=2491643 alnlen=1570
+vulgar: tr|A0A1S4H3G3|A0A1S4H3G3_ANOGA 83 399 . Aatri_ctg4 500113 501061 + 1475 M 316 948
+# --- START OF GFF DUMP ---
+#
+#
+##gff-version 2
+##source-version exonerate:protein2genome:local 2.4.0
+##date 2021-08-12
+##type DNA
+#
+#
+# seqname source feature start end score strand frame attributes
+#
+Aatri_ctg4	exonerate:protein2genome:local	gene	500114	501061	1475	+	.	gene_id 1 ; sequence tr|A0A1S4H3G3|A0A1S4H3G3_ANOGA ; gene_orientation . ; identity 73.10 ; similarity 83.54
+Aatri_ctg4	exonerate:protein2genome:local	cds	500114	501061	.	+	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	500114	501061	.	+	.	insertions 0 ; deletions 0 ; identity 73.10 ; similarity 83.54
+Aatri_ctg4	exonerate:protein2genome:local	similarity	500114	501061	1475	+	.	alignment_id 1 ; Query tr|A0A1S4H3G3|A0A1S4H3G3_ANOGA ; Align 500114 84 948
+# --- END OF GFF DUMP ---
+#
+>tr|A0A1S4H3G3|A0A1S4H3G3_ANOGA length=464 alnlen=316
+>Aatri_ctg4 length=2491643 alnlen=948
+vulgar: tr|A0NG47|A0NG47_ANOGA 48 203 . Aatri_ctg4 346377 347537 + 614 M 60 180 5 0 2 I 0 691 3 0 2 M 95 285
+# --- START OF GFF DUMP ---
+#
+#
+##gff-version 2
+##source-version exonerate:protein2genome:local 2.4.0
+##date 2021-08-12
+##type DNA
+#
+#
+# seqname source feature start end score strand frame attributes
+#
+Aatri_ctg4	exonerate:protein2genome:local	gene	346378	347537	614	+	.	gene_id 1 ; sequence tr|A0NG47|A0NG47_ANOGA ; gene_orientation + ; identity 64.52 ; similarity 80.65
+Aatri_ctg4	exonerate:protein2genome:local	cds	346378	346557	.	+	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	346378	346557	.	+	.	insertions 0 ; deletions 0 ; identity 45.90 ; similarity 67.21
+Aatri_ctg4	exonerate:protein2genome:local	splice5	346558	346559	.	+	.	intron_id 1 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	346558	347252	.	+	.	intron_id 1
+Aatri_ctg4	exonerate:protein2genome:local	splice3	347251	347252	.	+	.	intron_id 0 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	347253	347537	.	+	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	347253	347537	.	+	.	insertions 0 ; deletions 0 ; identity 75.79 ; similarity 89.47
+Aatri_ctg4	exonerate:protein2genome:local	similarity	346378	347537	614	+	.	alignment_id 1 ; Query tr|A0NG47|A0NG47_ANOGA ; Align 346378 49 180 ; Align 347253 109 285
+# --- END OF GFF DUMP ---
+#
+>tr|A0NG47|A0NG47_ANOGA length=203 alnlen=155
+>Aatri_ctg4 length=2491643 alnlen=1160
+vulgar: tr|A0NG47|A0NG47_ANOGA 47 203 . Aatri_ctg4 500134 500674 + 612 M 36 108 5 0 2 I 0 68 3 0 2 M 120 360
+# --- START OF GFF DUMP ---
+#
+#
+##gff-version 2
+##source-version exonerate:protein2genome:local 2.4.0
+##date 2021-08-12
+##type DNA
+#
+#
+# seqname source feature start end score strand frame attributes
+#
+Aatri_ctg4	exonerate:protein2genome:local	gene	500135	500674	612	+	.	gene_id 2 ; sequence tr|A0NG47|A0NG47_ANOGA ; gene_orientation + ; identity 62.82 ; similarity 79.49
+Aatri_ctg4	exonerate:protein2genome:local	cds	500135	500242	.	+	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	500135	500242	.	+	.	insertions 0 ; deletions 0 ; identity 54.05 ; similarity 70.27
+Aatri_ctg4	exonerate:protein2genome:local	splice5	500243	500244	.	+	.	intron_id 1 ; splice_site "AA"
+Aatri_ctg4	exonerate:protein2genome:local	intron	500243	500314	.	+	.	intron_id 1
+Aatri_ctg4	exonerate:protein2genome:local	splice3	500313	500314	.	+	.	intron_id 0 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	500315	500674	.	+	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	500315	500674	.	+	.	insertions 0 ; deletions 0 ; identity 65.83 ; similarity 82.50
+Aatri_ctg4	exonerate:protein2genome:local	similarity	500135	500674	612	+	.	alignment_id 2 ; Query tr|A0NG47|A0NG47_ANOGA ; Align 500135 48 108 ; Align 500315 84 360
+# --- END OF GFF DUMP ---
+#
+>tr|A0NG47|A0NG47_ANOGA length=203 alnlen=156
+>Aatri_ctg4 length=2491643 alnlen=540
+vulgar: tr|Q7PXQ1|Q7PXQ1_ANOGA 428 1908 . Aatri_ctg4 1356559 1351206 - 6429 M 42 126 S 0 2 5 0 2 I 0 83 3 0 2 S 1 1 M 143 429 5 0 2 I 0 113 3 0 2 M 96 288 S 0 2 5 0 2 I 0 123 3 0 2 S 1 1 M 185 555 S 0 1 5 0 2 I 0 87 3 0 2 S 1 2 M 202 606 5 0 2 I 0 115 3 0 2 M 173 519 5 0 2 I 0 133 3 0 2 M 80 240 G 2 0 M 10 30 5 0 2 I 0 99 3 0 2 M 65 195 G 1 0 M 75 225 S 0 2 5 0 2 I 0 137 3 0 2 S 1 1 M 402 1206
+# --- START OF GFF DUMP ---
+#
+#
+##gff-version 2
+##source-version exonerate:protein2genome:local 2.4.0
+##date 2021-08-12
+##type DNA
+#
+#
+# seqname source feature start end score strand frame attributes
+#
+Aatri_ctg4	exonerate:protein2genome:local	gene	1351207	1356559	6429	-	.	gene_id 1 ; sequence tr|Q7PXQ1|Q7PXQ1_ANOGA ; gene_orientation + ; identity 83.91 ; similarity 93.28
+Aatri_ctg4	exonerate:protein2genome:local	cds	1356432	1356559	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	1356432	1356559	.	-	.	insertions 0 ; deletions 0 ; identity 66.67 ; similarity 83.33
+Aatri_ctg4	exonerate:protein2genome:local	splice5	1356430	1356431	.	-	.	intron_id 1 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	1356345	1356431	.	-	.	intron_id 1
+Aatri_ctg4	exonerate:protein2genome:local	splice3	1356345	1356346	.	-	.	intron_id 0 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	1355915	1356344	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	1355915	1356344	.	-	.	insertions 0 ; deletions 0 ; identity 84.03 ; similarity 92.36
+Aatri_ctg4	exonerate:protein2genome:local	splice5	1355913	1355914	.	-	.	intron_id 2 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	1355798	1355914	.	-	.	intron_id 2
+Aatri_ctg4	exonerate:protein2genome:local	splice3	1355798	1355799	.	-	.	intron_id 1 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	1355508	1355797	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	1355508	1355797	.	-	.	insertions 0 ; deletions 0 ; identity 87.50 ; similarity 96.88
+Aatri_ctg4	exonerate:protein2genome:local	splice5	1355506	1355507	.	-	.	intron_id 3 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	1355381	1355507	.	-	.	intron_id 3
+Aatri_ctg4	exonerate:protein2genome:local	splice3	1355381	1355382	.	-	.	intron_id 2 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	1354824	1355380	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	1354824	1355380	.	-	.	insertions 0 ; deletions 0 ; identity 94.59 ; similarity 98.92
+Aatri_ctg4	exonerate:protein2genome:local	splice5	1354822	1354823	.	-	.	intron_id 4 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	1354733	1354823	.	-	.	intron_id 4
+Aatri_ctg4	exonerate:protein2genome:local	splice3	1354733	1354734	.	-	.	intron_id 3 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	1354125	1354732	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	1354125	1354732	.	-	.	insertions 0 ; deletions 0 ; identity 83.74 ; similarity 93.10
+Aatri_ctg4	exonerate:protein2genome:local	splice5	1354123	1354124	.	-	.	intron_id 5 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	1354006	1354124	.	-	.	intron_id 5
+Aatri_ctg4	exonerate:protein2genome:local	splice3	1354006	1354007	.	-	.	intron_id 4 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	1353487	1354005	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	1353487	1354005	.	-	.	insertions 0 ; deletions 0 ; identity 93.10 ; similarity 97.70
+Aatri_ctg4	exonerate:protein2genome:local	splice5	1353485	1353486	.	-	.	intron_id 6 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	1353350	1353486	.	-	.	intron_id 6
+Aatri_ctg4	exonerate:protein2genome:local	splice3	1353350	1353351	.	-	.	intron_id 5 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	1353080	1353349	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	1353080	1353349	.	-	.	insertions 0 ; deletions 2 ; identity 89.01 ; similarity 95.60
+Aatri_ctg4	exonerate:protein2genome:local	splice5	1353078	1353079	.	-	.	intron_id 7 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	1352977	1353079	.	-	.	intron_id 7
+Aatri_ctg4	exonerate:protein2genome:local	splice3	1352977	1352978	.	-	.	intron_id 6 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	1352555	1352976	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	1352555	1352976	.	-	.	insertions 0 ; deletions 1 ; identity 80.71 ; similarity 91.43
+Aatri_ctg4	exonerate:protein2genome:local	splice5	1352553	1352554	.	-	.	intron_id 8 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	1352414	1352554	.	-	.	intron_id 8
+Aatri_ctg4	exonerate:protein2genome:local	splice3	1352414	1352415	.	-	.	intron_id 7 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	1351207	1352413	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	1351207	1352413	.	-	.	insertions 0 ; deletions 0 ; identity 76.12 ; similarity 89.55
+Aatri_ctg4	exonerate:protein2genome:local	similarity	1351207	1356559	6429	-	.	alignment_id 1 ; Query tr|Q7PXQ1|Q7PXQ1_ANOGA ; Align 1356560 429 126 ; Align 1356344 472 429 ; Align 1355798 615 288 ; Align 1355380 712 555 ; Align 1354731 898 606 ; Align 1354006 1100 519 ; Align 1353350 1273 240 ; Align 1353110 1355 30 ; Align 1352977 1365 195 ; Align 1352782 1431 225 ; Align 1352413 1507 1206
+# --- END OF GFF DUMP ---
+#
+>tr|Q7PXQ1|Q7PXQ1_ANOGA length=2174 alnlen=1480
+>Aatri_ctg4 length=2491643 alnlen=5353
+vulgar: tr|Q7PHN5|Q7PHN5_ANOGA 1 192 . Aatri_ctg4 2161129 2158400 - 684 M 20 60 5 0 2 I 0 1786 3 0 2 M 44 132 5 0 2 I 0 165 3 0 2 M 27 81 S 0 2 5 0 2 I 0 61 3 0 2 S 1 1 M 54 162 S 0 1 5 0 2 I 0 128 3 0 2 S 1 2 M 44 132
+# --- START OF GFF DUMP ---
+#
+#
+##gff-version 2
+##source-version exonerate:protein2genome:local 2.4.0
+##date 2021-08-12
+##type DNA
+#
+#
+# seqname source feature start end score strand frame attributes
+#
+Aatri_ctg4	exonerate:protein2genome:local	gene	2158401	2161129	684	-	.	gene_id 1 ; sequence tr|Q7PHN5|Q7PHN5_ANOGA ; gene_orientation + ; identity 76.19 ; similarity 85.71
+Aatri_ctg4	exonerate:protein2genome:local	cds	2161070	2161129	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2161070	2161129	.	-	.	insertions 0 ; deletions 0 ; identity 71.43 ; similarity 85.71
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2161068	2161069	.	-	.	intron_id 1 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2159280	2161069	.	-	.	intron_id 1
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2159280	2159281	.	-	.	intron_id 0 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2159148	2159279	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2159148	2159279	.	-	.	insertions 0 ; deletions 0 ; identity 73.33 ; similarity 84.44
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2159146	2159147	.	-	.	intron_id 2 ; splice_site "TA"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2158979	2159147	.	-	.	intron_id 2
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2158979	2158980	.	-	.	intron_id 1 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2158896	2158978	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2158896	2158978	.	-	.	insertions 0 ; deletions 0 ; identity 88.89 ; similarity 96.30
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2158894	2158895	.	-	.	intron_id 3 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2158831	2158895	.	-	.	intron_id 3
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2158831	2158832	.	-	.	intron_id 2 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2158667	2158830	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2158667	2158830	.	-	.	insertions 0 ; deletions 0 ; identity 87.04 ; similarity 90.74
+Aatri_ctg4	exonerate:protein2genome:local	splice5	2158665	2158666	.	-	.	intron_id 4 ; splice_site "GT"
+Aatri_ctg4	exonerate:protein2genome:local	intron	2158535	2158666	.	-	.	intron_id 4
+Aatri_ctg4	exonerate:protein2genome:local	splice3	2158535	2158536	.	-	.	intron_id 3 ; splice_site "AG"
+Aatri_ctg4	exonerate:protein2genome:local	cds	2158401	2158534	.	-	.	
+Aatri_ctg4	exonerate:protein2genome:local	exon	2158401	2158534	.	-	.	insertions 0 ; deletions 0 ; identity 59.09 ; similarity 75.00
+Aatri_ctg4	exonerate:protein2genome:local	similarity	2158401	2161129	684	-	.	alignment_id 1 ; Query tr|Q7PHN5|Q7PHN5_ANOGA ; Align 2161130 2 60 ; Align 2159280 22 132 ; Align 2158979 66 81 ; Align 2158830 94 162 ; Align 2158533 149 132
+# --- END OF GFF DUMP ---
+#
+>tr|Q7PHN5|Q7PHN5_ANOGA length=192 alnlen=191
+>Aatri_ctg4 length=2491643 alnlen=2729

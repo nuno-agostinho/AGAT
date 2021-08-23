@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Carp;
 use Try::Tiny;
+use Clone 'clone';
 use File::Basename;
 use POSIX qw(strftime);
 use Bio::DB::Taxonomy;
@@ -18,7 +19,9 @@ use AGAT::Omniscient;
 my $header = get_agat_header();
 #The cases are exclusive, one result could not be part of several cases.
 my %cases_explanation = (
-  -1  => "No protein alignement overlap the gene model.",
+  -3  => "No protein alignement overlap the gene model.",
+  -2  => "Overlap but not analyzed due to missing expected attributes to catch protein name. Try with --vulgar",
+  -1  => "There is protein alignment that overlap the gene model but we don't succeed to compute the coverage (Missing Gap attribute). Try with --similarity",
   0   => "There is protein alignment that overlap the gene model but none goes over the threshold defined.",
   1   => "There is protein alignment that overlap the gene model, the overlap is over the threshold defined, the protein is from one of the species defined, and the PE value is as defined. P.S: Case only possible when both options sp and pe are activated.",
   2.1  => "There is protein alignment that overlap the gene model, the overlap is over the threshold defined, the PE value is as defined.",
@@ -26,14 +29,16 @@ my %cases_explanation = (
   3   => "There is protein alignment that overlap the gene model, the overlap is over the threshold defined."
 );
 
-my $opt_output                 = undef;
+my $opt_output             = undef;
 my $annotation_gff         = undef;
 my $protein_gff            = undef;
+my $vulgar                 = undef
 my $protein_fasta          = undef;
 my $valueK                 = 50;
 my $opt_test               = "=";
 my $attributes             = undef ;
 my $whole_sequence_opt     = undef ;
+my $similarity             = undef ;
 my $priority_opt           = "pe";
 my $sort_method_by_species = undef ;
 my $sort_method_by_pe      = undef ;
@@ -50,8 +55,10 @@ if ( !GetOptions(
     "sp:s"                   => \$sort_method_by_species,
     'test=s'                 => \$opt_test,
     'pe:i'                   => \$sort_method_by_pe,
+    'similarity!'            => \$similarity,
     'priority|p=s'           => \$priority_opt,
     "fasta|pfasta=s"         => \$protein_fasta,
+    "vulgar!"                => \$vulgar,
     "w"                      => \$whole_sequence_opt,
     "value|threshold=i"      => \$valueK,
     'method|m:s'             => \$method_opt,
@@ -232,6 +239,7 @@ my %allIDs_prot; # save ID in lower case to avoid cast problems
 foreach my $long_id (@long_ids_prot){
   #uniprot case long_id=>sp|Q5R8S7|PPIA_PONPY short_id=Q5R8S7
   my $short_id = _take_clean_id($long_id);
+  #print "$long_id $short_id \n";
   $allIDs_prot{lc($short_id)}=$long_id;
 }
 _print( "Done\n",0);
@@ -242,32 +250,41 @@ my $topfeatures = get_feature_type_by_agat_value($hash_omniscient, 'level1', 'to
 
 my %cases;
 
-foreach my $locusID ( keys %{$omniscient1_sorted}){ # tag_l1 = protein_match match ....
-  foreach my $tag_l1 ( keys %{$omniscient1_sorted->{$locusID}} ) {
+foreach my $locusID (sort keys %{$omniscient1_sorted}){ # tag_l1 = protein_match match ....
+  foreach my $tag_l1 (sort keys %{$omniscient1_sorted->{$locusID}} ) {
+    
 
     #skip top features
     if(exists_keys($topfeatures,($tag_l1))){ next; }
 
     # Go through location from left to right ### !!
     my @aligns;
-    my $selected=undef;
-    while ( @{$omniscient1_sorted->{$locusID}{$tag_l1}} ){
 
-      my $location = shift  @{$omniscient1_sorted->{$locusID}{$tag_l1}};# This location will be updated on the fly
-      my $id1_l1 = lc($location->[0]);
+    my $list_locations =  clone( $omniscient1_sorted->{$locusID}{$tag_l1});
 
-      if( exists_keys($omniscient2_sorted, ($locusID ) ) ) {
+    # loop over locations
+    while ( @{$list_locations} ){
 
+      my $overlap_but_no_Name=undef;
+      my $overlap_but_no_calcul=undef;
+
+      my $location = shift @{$list_locations};   
+      my $id1_l1 = lc($location->[0]);    
+      
+      if( exists_keys($omniscient2_sorted, ( $locusID ) ) ) {
+        
         foreach my $tag2_l1 ( keys %{$omniscient2_sorted->{$locusID}} ) {
-
+          
           #skip top features
           if(exists_keys($topfeatures,($tag2_l1))){ next; }
 
-          while ( @{$omniscient2_sorted->{$locusID}{$tag2_l1}} ){
+          my $list_locations2 =  clone( $omniscient2_sorted->{$locusID}{$tag2_l1});
+          while ( @{$list_locations2} ){
 
-            my $location2 = shift  @{$omniscient2_sorted->{$locusID}{$tag2_l1}};# This location will be updated on the fly
+            my $location2 = shift  @{$list_locations2};# This location will be updated on the fly
             my $id2_l1 = lc($location2->[0]);
 
+            
             #If location_to_check start if over the end of the reference location, we stop
             if($location2->[1] > $location->[2]) {last;}
             #If location_to_check end if inferior to the start of the reference location, we continue next
@@ -278,9 +295,50 @@ foreach my $locusID ( keys %{$omniscient1_sorted}){ # tag_l1 = protein_match mat
 
               ###################################
               # let's check at the deeper level #
-              my $prot_tag = $prot_omniscient->{'level1'}{$tag2_l1}{$id2_l1}->_tag_value('Name');
-              my $align = check_gene_overlap_gffAlign($hash_omniscient, $prot_omniscient, $id1_l1, $id2_l1, $prot_tag); #If contains CDS it has to overlap at CDS level to be merged, otherwise any type of feature level3 overlaping is sufficient to decide to merge the level1 together
-              #print Dumper( $align);
+              my $prot_tag = undef;
+              if( !$vulgar){
+               if ($prot_omniscient->{'level1'}{$tag2_l1}{$id2_l1}->has_tag('Name')){
+                $prot_tag = $prot_omniscient->{'level1'}{$tag2_l1}{$id2_l1}->_tag_value('Name');
+                }
+                else{
+                  print "No Name tag in: ".$prot_omniscient->{'level1'}{$tag2_l1}{$id2_l1}->gff_string().". You can try to rerun with --vulgar\n";
+                  $overlap_but_no_Name=1;
+                }
+              }
+              else { # $vulgar activated
+                if ( $prot_omniscient->{'level1'}{$tag2_l1}{$id2_l1}->has_tag('vulgar')){
+                my $vulgar = $prot_omniscient->{'level1'}{$tag2_l1}{$id2_l1}->_tag_value('vulgar');
+                my @vulgar_values = split /\s/, $vulgar;
+                $prot_tag = $vulgar_values[0];
+                }
+                else{
+                  print "No vulgar attribute we cannot continue for this target\n"; 
+                  $overlap_but_no_Name=1;
+                }
+              }
+
+              # skip if we cannot continue and inform user
+              if (! $prot_tag){
+                print "No protein name found in ".$prot_omniscient->{'level1'}{$tag2_l1}{$id2_l1}->gff_string()."\n" if ($verbose); 
+                next;
+              }
+
+              my $align = undef;
+              if(! $similarity){ # Compute with GAP attribute
+                $align = check_gene_overlap_gffAlign($hash_omniscient, $prot_omniscient, $id1_l1, $id2_l1, $prot_tag); #If contains CDS it has to overlap at CDS level to be merged, otherwise any type of feature level3 overlaping is sufficient to decide to merge the level1 together
+              }
+              else{
+                if($prot_omniscient->{'level1'}{$tag2_l1}{$id2_l1}->has_tag('similarity')){
+                  my $value = $prot_omniscient->{'level1'}{$tag2_l1}{$id2_l1}->_tag_value('similarity');
+                  my ($protLenSeqOriginal, $proteinName, $descritpion) = _get_sequence($db_prot, $prot_tag);
+                  my @list_res = ($id2_l1, $value, $value, $value, $value, $value, $value , $proteinName, $descritpion);
+                  $align = \@list_res;
+                }
+                else{
+                  print "Attribute similarity absent!\n";
+                }
+              }
+              # check we got alignment result
               if(@{$align} ){ #check is not empty
                 # @list_res = ($gene_id2, $w_overlap12, $w_overlap12_abs, $w_overlap21, $w_overlap21_abs, $overlap12, $overlap12_abs, $overlap21, $overlap21_abs);
                 # align contains: level1 id of the protein into the gff file (gene_id2),
@@ -295,6 +353,9 @@ foreach my $locusID ( keys %{$omniscient1_sorted}){ # tag_l1 = protein_match mat
                 # absolute overlap percent of the protein  against the whole gene model but rationalized by the total length (prot+gene-overlap) $w_overlap_JD_abs
                 # absolute overlap percent of the protein  against the coding part of the gene model but rationalized by the total length (prot+gene-overlap) $overlap_JD_abs
                 push @aligns, [@{$align}];
+              }
+              else{
+                $overlap_but_no_calcul=1; #overlap but do not align
               }
             }
           }
@@ -336,7 +397,7 @@ foreach my $locusID ( keys %{$omniscient1_sorted}){ # tag_l1 = protein_match mat
         }
 
         if(@aligns_filtered){
-
+          my $selected=undef;
           #########################################
           # 1) filter by pe and specific species
           if($sort_method_by_pe and $sort_method_by_species){
@@ -392,7 +453,7 @@ foreach my $locusID ( keys %{$omniscient1_sorted}){ # tag_l1 = protein_match mat
             $cases{3}++;
           }
 
-          _print( "Protein selected =  $selected\n",0) if ($verbose);
+          _print( "Protein selected =  @{$selected}\n",0) if ($verbose);
 
 
 #               +------------------------------------------------------+
@@ -444,17 +505,22 @@ foreach my $locusID ( keys %{$omniscient1_sorted}){ # tag_l1 = protein_match mat
               }
             }
           }
-
-
-
         }
         else{
           $cases{0}++;
           _print( "No protein overlap over the threshold $valueK for this gene model: $id1_l1\n", 0) if ($verbose);
         }
       }
+      elsif ( $overlap_but_no_Name ){
+        $cases{-2}++; # 
+        _print( "No attibute to find the protein in the DB: $id1_l1\n", 0) if ($verbose);
+      }
+      elsif( $overlap_but_no_calcul ){
+        $cases{-1}++; # cannot check
+        _print( "Cannot check overlap in detail because mandatory attributes missing to look at overlap size in detail: $id1_l1\n", 0) if ($verbose);
+      }
       else{
-        $cases{-1}++;
+        $cases{-3}++;
         _print( "No protein aligned to this gene model: $id1_l1\n", 0) if ($verbose);
       }
     }
@@ -877,8 +943,8 @@ sub check_gene_overlap_gffAlign{
             #print "lenght protein: $lenght2\n";
 
 
-            my $w_overlap=0;
-            my $w_abs_overlap=0;
+            my $w_overlap=undef;
+            my $w_abs_overlap=undef;
             my $w_lenght1=0;
             ####################################
             # CALCUL ONTO THE WHOLE GENE MODEL #
@@ -913,12 +979,13 @@ sub check_gene_overlap_gffAlign{
 
                           my $end = $feature2->end < $feature1->end ? $feature2->end :  $feature1->end;
 
-                             my $chunck_abs_overlap += get_absolute_match($feature2, $start, $end);
-                             $w_abs_overlap += $chunck_abs_overlap;
-                             #print "chunck_abs_overlap = $chunck_abs_overlap\n";
-                             #print "chunck_overlap= ".($end - $start + 1)."\n";
-                             $w_overlap += ($end - $start + 1);
-
+                          my $chunck_abs_overlap = get_absolute_match($feature2, $start, $end);
+                          if($chunck_abs_overlap){
+                            $w_abs_overlap += $chunck_abs_overlap;
+                            #print "chunck_abs_overlap = $chunck_abs_overlap\n";
+                            #print "chunck_overlap= ".($end - $start + 1)."\n";
+                            $w_overlap += ($end - $start + 1);
+                          }
                         }
                       }
                     }
@@ -929,12 +996,12 @@ sub check_gene_overlap_gffAlign{
             }
 
             #1 -> 2
-            #$w_overlap12 = sprintf "%.1f", ($w_overlap*100/$w_lenght1);
-            $w_overlap12_abs = sprintf "%.1f", ($w_abs_overlap*100/$w_lenght1);
+            if (defined $w_abs_overlap) {
+              $w_overlap12_abs = sprintf "%.1f", ($w_abs_overlap*100/$w_lenght1);
+            }
 
-
-            my $overlap=0;
-            my $abs_overlap=0;
+            my $overlap=undef;
+            my $abs_overlap=undef;
             my $lenght1=0;
             # ##########################################################################
             # # CALCUL ONTO THE CODING SEQUENCE PART OF THE GENE MODEL ONLY (SKIP UTR) #
@@ -956,55 +1023,59 @@ sub check_gene_overlap_gffAlign{
                         if($feature2->start > $feature1->end) {last;}
                         if($feature2->end < $feature1->start) {next;}
 
-            #             print "We overlap !\n";
+                        # print "We overlap !\n";
                         #print "prot location: ".$feature2->start." ".$feature2->end."\n";
                         my $start = $feature2->start > $feature1->start ? $feature2->start : $feature1->start;
 
                         my $end = $feature2->end < $feature1->end ? $feature2->end :  $feature1->end;
 
-                           my $chunck_abs_overlap += get_absolute_match($feature2, $start, $end);
-                           $abs_overlap += $chunck_abs_overlap;
-                           #print "chunck_abs_overlap = $chunck_abs_overlap\n";
-                           #print "chunck_overlap= ".($end - $start + 1)."\n";
-                           $overlap += ($end - $start + 1);
-
+                        my $chunck_abs_overlap = get_absolute_match($feature2, $start, $end);
+                        if($chunck_abs_overlap){
+                          $abs_overlap += $chunck_abs_overlap;
+                          #print "chunck_abs_overlap = $chunck_abs_overlap\n";
+                          #print "chunck_overlap= ".($end - $start + 1)."\n";
+                          $overlap += ($end - $start + 1);
+                        }
                       }
                       #print "overlap = $overlap - abs_overlap = $abs_overlap\n";
                     }
                   }
                 }
               }
-            #1 -> 2
-            #$overlap12 = sprintf "%.1f", ($overlap*100/$lenght1);
-            $overlap12_abs = sprintf "%.1f", ($abs_overlap*100/$lenght1);
+              #1 -> 2
+              if (defined $abs_overlap) {
+                $overlap12_abs = sprintf "%.1f", ($abs_overlap*100/$lenght1);
+              }
             }
 
             ###########################
             # CORRECT THE 21 value by the real length of the protein (Not the whole original protein is aligned into the protein gff file)
-            try{
-              my ($protLenSeqOriginal, $proteinName, $descritpion) = _get_sequence($db_prot, $prot_tag);
-              my $lenght_corrected = $protLenSeqOriginal*3;
-              #2 -> 1 whole sequence
-              #$w_overlap21 = sprintf "%.1f", ($w_overlap*100/$lenght_corrected);
-              $w_overlap21_abs = sprintf "%.1f", ($w_abs_overlap*100/$lenght_corrected);
-              #2 -> 1 coding sequence
-              #$overlap21 = sprintf "%.1f", ($overlap*100/$lenght_corrected);
-              $overlap21_abs = sprintf "%.1f", ($abs_overlap*100/$lenght_corrected);
+            if (defined $w_abs_overlap) {
+              try{
+                my ($protLenSeqOriginal, $proteinName, $descritpion) = _get_sequence($db_prot, $prot_tag);
+                my $lenght_corrected = $protLenSeqOriginal*3;
+                #2 -> 1 whole sequence
+                #$w_overlap21 = sprintf "%.1f", ($w_overlap*100/$lenght_corrected);
+                $w_overlap21_abs = sprintf "%.1f", ($w_abs_overlap*100/$lenght_corrected);
+                #2 -> 1 coding sequence
+                #$overlap21 = sprintf "%.1f", ($overlap*100/$lenght_corrected);
+                $overlap21_abs = sprintf "%.1f", ($abs_overlap*100/$lenght_corrected);
 
-              $overlap_JD_abs = sprintf "%.1f", ( $abs_overlap*100/($lenght_corrected+$lenght1-$abs_overlap));
-              $w_overlap_JD_abs = sprintf "%.1f", ( $abs_overlap*100/($lenght_corrected+$w_lenght1-$abs_overlap));
-              #@list_res = ($gene_id2, $w_overlap12, $w_overlap12_abs, $w_overlap21, $w_overlap21_abs, $overlap12, $overlap12_abs, $overlap21, $overlap21_abs, $w_overlap_JD_abs, $overlap_JD_abs , $proteinName, $descritpion);
-              @list_res = ($gene_id2, $w_overlap12_abs, $w_overlap21_abs, $overlap12_abs, $overlap21_abs, $w_overlap_JD_abs, $overlap_JD_abs , $proteinName, $descritpion);
-              }
-            catch{
-              print "We cannot check the real protein length, let's continue without this one: $prot_tag\n";
-              #2 -> 1 whole sequence
-              #$w_overlap21 = sprintf "%.1f", ($w_overlap*100/$lenght2);
-              #$w_overlap21_abs = sprintf "%.1f", ($w_abs_overlap*100/$lenght2);
-              #2 -> 1 coding sequence
-              #$overlap21 = sprintf "%.1f", ($overlap*100/$lenght2);
-              #$overlap21_abs = sprintf "%.1f", ($abs_overlap*100/$lenght2);
-            };
+                $overlap_JD_abs = sprintf "%.1f", ( $abs_overlap*100/($lenght_corrected+$lenght1-$abs_overlap));
+                $w_overlap_JD_abs = sprintf "%.1f", ( $abs_overlap*100/($lenght_corrected+$w_lenght1-$abs_overlap));
+                #@list_res = ($gene_id2, $w_overlap12, $w_overlap12_abs, $w_overlap21, $w_overlap21_abs, $overlap12, $overlap12_abs, $overlap21, $overlap21_abs, $w_overlap_JD_abs, $overlap_JD_abs , $proteinName, $descritpion);
+                @list_res = ($gene_id2, $w_overlap12_abs, $w_overlap21_abs, $overlap12_abs, $overlap21_abs, $w_overlap_JD_abs, $overlap_JD_abs , $proteinName, $descritpion);
+                }
+              catch{
+                print "We cannot check the real protein length, let's continue without this one: $prot_tag\n";
+                #2 -> 1 whole sequence
+                #$w_overlap21 = sprintf "%.1f", ($w_overlap*100/$lenght2);
+                #$w_overlap21_abs = sprintf "%.1f", ($w_abs_overlap*100/$lenght2);
+                #2 -> 1 coding sequence
+                #$overlap21 = sprintf "%.1f", ($overlap*100/$lenght2);
+                #$overlap21_abs = sprintf "%.1f", ($abs_overlap*100/$lenght2);
+              };
+            }
           }
         }
       }
@@ -1014,7 +1085,7 @@ sub check_gene_overlap_gffAlign{
   return \@list_res;
 }
 
-# Protein could well align with the genome sequene, but less well with the gene model
+# Protein could well align with the genome sequence, but less well with the gene model
 # So we re-compute the protein overlap according only to the gene model
 sub get_absolute_match{
   my  ($feature, $start, $end)=@_;
@@ -1023,7 +1094,8 @@ sub get_absolute_match{
 
   # We first need to check that the GAP feature is present among the protein attributes
   if(! $feature->has_tag('Gap')){
-    warn "I cannot calculate the absolute match because the tag Gap is absent !\n";
+    warn "I cannot calculate the absolute match because the tag Gap is absent! Try with --similarity\n";
+    return undef;
   }
   else{
 
@@ -1215,7 +1287,7 @@ agat_sp_load_function_from_protein_align.pl
 
 The script takes an annotation in gff format, a protein alignment in gff format and a protein fasta file as input. It checks if protein alignement overlap gene models, and will load the gene name and/or the function to the gene model according to the user requirements.
 The script applies the following steps:
-For each gene model structure it take the proteins aligned against, and sort them by an overlaping score. The best coming first.
+For each gene model structure it take the proteins aligned against, and sort them by an overlaping score (identity). The best coming first.
 Then it filters them by applying the overlaping score threshold.
 1) If you activated the PE and the species filtering, we will try to find the best protein that follows the defined requirement.
 2.1) If you activated the PE filtering or the precedent filtering (1) didn't succeed, we take the best protein according to the PE requirement.
@@ -1258,7 +1330,7 @@ Gene mapping percentage over which a gene must be reported. By default the value
 
 =item B<-w>
 
-Compute the overlap score based on the whole annotation sequence. By default we use only the coding sequence part.
+Compute the overlap score (identity) based on the whole annotation sequence. By default we use only the coding sequence part.
 
 =item B<--pe>
 
